@@ -1,0 +1,55 @@
+# Authentication, Hashes and Access Control
+
+## What is a Password Hash?
+Windows never stores passwords in plain text. Instead it stores a mathematical transformation called a hash.
+
+- Password: `MyPassword123`
+- Stored as: `a8c4f3e2b7d9...` (irreversible)
+
+**Key difference — Hash vs Encryption:**
+- Encryption can be reversed with the right key
+- Hash is one-way — cannot be reversed
+- This is why hashes are used for passwords, not encryption
+
+## How Windows Authenticates
+1. User types password
+2. Windows transforms it into a hash
+3. Compares with stored hash
+4. If they match — access granted
+5. Real password never travels the network
+
+## NTLM — The Vulnerable Protocol
+NTLM is an old Windows authentication protocol. Its weakness: it accepts the hash directly as proof of identity.
+
+**Pass-the-Hash attack:**
+- Attacker steals the hash (not the password)
+- Uses the hash to authenticate — no cracking needed
+- Windows accepts it as valid
+
+## Defenses Against These Attacks
+
+| Defense | Description | Cost |
+|---------|-------------|------|
+| Kerberos | Modern protocol, doesn't accept raw hashes | Requires Active Directory |
+| MFA | Second factor blocks hash-only attacks | Low |
+| RBAC | Limits damage if an account is compromised | Free — configuration only |
+
+## RBAC — Role Based Access Control
+Each user only accesses what their role requires.
+
+Example for a cadastral system:
+- Public user → view land records only
+- Municipal officer → view and edit boundaries
+- Cadastral admin → manage users and records
+- DBA → database access only, no web interface
+- System admin → infrastructure only, no data
+
+**If an attacker compromises a low-privilege account, the damage is contained.**
+
+## Connection to Cadastral Security
+A cadastral system using NTLM without MFA is vulnerable to pass-the-hash. An attacker who compromises one workstation can steal hashes and access the land registry database without knowing any passwords.
+
+Defense priority for a municipal cadastral system:
+1. RBAC — implement immediately, zero cost
+2. MFA — low cost, high impact
+3. Migrate from NTLM to Kerberos — long term
