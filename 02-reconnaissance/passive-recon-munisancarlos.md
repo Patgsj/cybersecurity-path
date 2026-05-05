@@ -55,3 +55,21 @@ All this information was gathered in under 10 minutes using only public tools �
 
 ## Legal Note
 This reconnaissance was performed for educational purposes only using publicly available information. No systems were accessed without authorization.
+
+## CVE Analysis — Nginx 1.26.1
+
+Checked against official Nginx security advisories (nginx.org/en/security_advisories.html)
+
+| CVE | Severity | Description | Fix |
+|-----|----------|-------------|-----|
+| CVE-2025-23419 | Medium | SSL session reuse vulnerability | Update to 1.26.3+ |
+| CVE-2025-53859 | Low | Buffer overread in ngx_mail_smtp_module | Update to 1.26.x latest |
+| CVE-2024-7347 | Low | Buffer overread in ngx_http_mp4_module | Update to 1.26.2+ |
+| CVE-2026-1642 | Medium | SSL upstream injection | Update to 1.28.2+ |
+| CVE-2026-27651 | Low | NULL pointer dereference CRAM-MD5 | Update to 1.28.3+ |
+| CVE-2026-27654 | Medium | Buffer overflow ngx_http_dav_module | Update to 1.28.3+ |
+| CVE-2026-27784 | Medium | Buffer overflow ngx_http_mp4_module | Update to 1.28.3+ |
+| CVE-2026-32647 | Medium | Buffer overflow ngx_http_mp4_module | Update to 1.28.3+ |
+
+**Total: 8 known vulnerabilities — 5 medium, 3 low**
+**Recommendation: Update Nginx to latest stable version immediately**
