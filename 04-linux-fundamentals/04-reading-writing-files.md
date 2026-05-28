@@ -1,19 +1,3 @@
-Ah, entendido — creaste el archivo vacío (o con el nombre solamente) pero todavía sin contenido. Perfecto, así que vamos a llenarlo.
-Te paso el contenido formateado. Solo cópialo y pégalo dentro del archivo que ya creaste.
-
-Pasos
-1. Abre tu archivo 04-reading-writing-files.md en GitHub
-2. Si está vacío, clic en el lápiz (Edit) para editarlo
-3. Pega el contenido de abajo
-4. Commit changes con el mensaje:
-Add notes on cat, less, nano and redirection operators
-
-Contenido para copiar y pegar
-markdown# 📖 Leer y escribir archivos — cat, less, nano
-
-> Sesión práctica del 28 de mayo de 2026  
-> Lab realizado en Ubuntu 24.04 LTS (VMware Workstation)
-
 ---
 
 ## Comandos para LEER archivos
