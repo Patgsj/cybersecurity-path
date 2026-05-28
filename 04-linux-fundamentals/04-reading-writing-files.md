@@ -1,3 +1,9 @@
+
+# 📖 Leer y escribir archivos — cat, less, nano
+
+> Sesión práctica del 28 de mayo de 2026  
+> Lab realizado en Ubuntu 24.04 LTS (VMware Workstation)
+
 ---
 
 ## Comandos para LEER archivos
