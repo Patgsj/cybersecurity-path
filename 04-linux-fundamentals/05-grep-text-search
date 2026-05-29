@@ -106,11 +106,3 @@ Resultado: lista de todos los intentos de login fallidos con su ubicación exact
 
 5. grep busca PATRONES, no valores. Para Linux, "5" es un carácter, no un número. Por eso "5" encuentra "15", "55", "95"... Si quieres exactitud, usa -w.
 
----
-
-## Próximo paso
-
-- Análisis de /etc/passwd usando grep
-- Pipes (|) — encadenar comandos
-- find — buscar archivos por nombre
-- Lectura de logs reales en /var/log/
