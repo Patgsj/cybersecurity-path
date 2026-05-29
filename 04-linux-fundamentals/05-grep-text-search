@@ -1,0 +1,116 @@
+# 🔍 Buscar texto con grep — el comando del analista
+
+> Sesión práctica del 29 de mayo de 2026  
+> Lab realizado en Ubuntu 24.04 LTS (VMware Workstation)
+
+---
+
+## Qué es grep
+
+`grep` es uno de los comandos más usados por analistas de seguridad. Filtra líneas dentro de archivos: muestra solo las que contienen un patrón de texto.
+
+Sintaxis básica:
+
+    grep "patron" archivo.txt
+
+Lee el archivo y devuelve solo las líneas que contienen el patrón. Las demás se descartan de la vista.
+
+---
+
+## Comportamiento clave: grep busca PATRONES, no palabras exactas
+
+    grep "5" numeros.txt
+
+Busca cualquier línea que contenga el carácter "5" en cualquier posición. Encuentra: 5, 15, 25, 50, 51, 55, 95... (19 líneas en total para un archivo con números 1-100).
+
+Para buscar palabra completa se usa -w:
+
+    grep -w "5" numeros.txt
+
+Devuelve solo "5" exacto. Las demás (15, 55, 95) ya no aparecen.
+
+---
+
+## Doble cara del silencio en grep
+
+| Resultado | Qué significa |
+|-----------|---------------|
+| Aparecen líneas | Encontró coincidencias |
+| Silencio (no aparece nada) | Búsqueda completa, sin coincidencias |
+| Error "No such file" | El archivo NO existe |
+
+El silencio NO es error. Es "no hay nada que mostrar". En ciberseguridad esto importa: si buscas "Failed login" en un log y no devuelve nada, eso es buena noticia.
+
+---
+
+## Opciones esenciales de grep
+
+| Opción | Qué hace |
+|--------|----------|
+| -w | Palabra completa (whole word) |
+| -i | Ignora mayúsculas/minúsculas |
+| -v | Inverso: muestra líneas que NO contienen el patrón |
+| -c | Cuenta líneas coincidentes |
+| -n | Muestra el número de línea de cada coincidencia |
+| -r | Busca recursivamente en una carpeta entera |
+
+Las opciones se combinan: -vc, -in, -ivn, etc.
+
+---
+
+## Ejemplos prácticos
+
+Contar intentos de login fallidos:
+
+    grep -c "Failed password" /var/log/auth.log
+
+Buscar ignorando mayúsculas:
+
+    grep -i "error" archivo.log
+
+Excluir ruido legítimo (ver solo lo sospechoso):
+
+    grep -v "192.168.1.1" /var/log/auth.log
+
+Encontrar con número de línea:
+
+    grep -n "failed" /var/log/auth.log
+
+Resultado: 1247:Failed password for user... → línea 1247 del log contiene esa entrada.
+
+---
+
+## El comando real de un analista
+
+    grep -i -n "failed" /var/log/auth.log
+
+Lectura:
+- -i encuentra "Failed", "FAILED", "failed"
+- -n muestra número de línea
+- "failed" es el patrón buscado
+- /var/log/auth.log es el log de autenticación de Linux
+
+Resultado: lista de todos los intentos de login fallidos con su ubicación exacta en el log. Es un primer reporte de incidente en formato bruto.
+
+---
+
+## Insights de ciberseguridad
+
+1. grep es la primera herramienta de triage en cualquier incidente. Cuando llega una alerta, lo primero es filtrar los logs con grep para encontrar el patrón sospechoso.
+
+2. La opción -v es la más útil cuando no sabes qué buscas. A veces es más fácil excluir lo conocido (tráfico legítimo) que encontrar lo desconocido (el atacante).
+
+3. -c te da números rápidos para tomar decisiones. 1,247 intentos fallidos en una hora = ataque de fuerza bruta en curso. No necesitas leer las 1,247 líneas.
+
+4. -n es tu coordenada en el pajar. En logs gigantes (50,000+ líneas), saber el número de línea es lo que te permite ir directo a inspeccionar el contexto alrededor del hallazgo.
+
+5. grep busca PATRONES, no valores. Para Linux, "5" es un carácter, no un número. Por eso "5" encuentra "15", "55", "95"... Si quieres exactitud, usa -w.
+
+---
+
+## Próximo paso
+
+- Análisis de /etc/passwd usando grep
+- Pipes (|) — encadenar comandos
+- find — buscar archivos por nombre
+- Lectura de logs reales en /var/log/
