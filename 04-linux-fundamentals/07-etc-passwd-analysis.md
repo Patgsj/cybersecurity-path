@@ -1,6 +1,6 @@
 # 👥 Análisis de /etc/passwd — los habitantes del sistema
 
-> Sesión práctica del 2 de junio de 2026  
+> Sesión práctica del 3 de junio de 2026  
 > Lab realizado en Ubuntu 24.04 LTS (VMware Workstation)
 
 ---
