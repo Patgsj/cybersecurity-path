@@ -10,17 +10,16 @@ Fecha: julio 2026
 
 ## 1. Identificación del Sistema
 
-Usuario auditor: patgsj
-Identidad completa: UID 1000, GID 1000
-Grupos secundarios: adm, cdrom, sudo, dip, plugdev, users, lpadmin
-Privilegios elevados: sí (miembro del grupo sudo)
+- Usuario auditor: patgsj
+- Identidad completa: UID 1000, GID 1000
+- Grupos secundarios: adm, cdrom, sudo, dip, plugdev, users, lpadmin
+- Privilegios elevados: sí (miembro del grupo sudo)
+- Hostname: patgsj
+- Sistema operativo: Ubuntu 24.04 LTS
+- Kernel: Linux 6.17.0-29-generic (compilado el 11 mayo 2026)
+- Arquitectura: x86_64 (64 bits)
 
-Hostname: patgsj
-Sistema operativo: Ubuntu 24.04 LTS
-Kernel: Linux 6.17.0-29-generic (compilado el 11 mayo 2026)
-Arquitectura: x86_64 (64 bits)
-
-Observación: el sistema operativo y el kernel están actualizados.
+**Observación:** el sistema operativo y el kernel están actualizados.
 El usuario que ejecuta esta auditoría tiene privilegios sudo,
 lo que permite acceso completo a archivos del sistema.
 
@@ -28,29 +27,32 @@ lo que permite acceso completo a archivos del sistema.
 
 ## 2. Análisis de Usuarios y Privilegios
 
-Cuentas con capacidad de login (shell /bin/bash):
+**Cuentas con capacidad de login (shell /bin/bash):**
+
 - root (UID 0) — administrador del sistema
 - patgsj (UID 1000) — usuario auditor
 
 Total: 2 cuentas. No se detectaron cuentas de prueba, backup 
 o abandonadas con login habilitado.
 
-Verificación de cuentas UID 0 (root encubierto):
-Comando: awk -F: '$3 == 0 {print $1}' /etc/passwd
-Resultado: root
+**Verificación de cuentas UID 0 (root encubierto):**
+
+- Comando: `awk -F: '$3 == 0 {print $1}' /etc/passwd`
+- Resultado: root
 
 Solo la cuenta root legítima posee UID 0. No se detectaron 
 cuentas backdoor con privilegios de root disfrazadas bajo 
 otro nombre.
 
-Miembros del grupo sudo:
-Comando: grep "sudo" /etc/group
-Resultado: sudo:x:27:patgsj
+**Miembros del grupo sudo:**
+
+- Comando: `grep "sudo" /etc/group`
+- Resultado: sudo:x:27:patgsj
 
 Único miembro: patgsj. Cumple el principio de mínimo privilegio 
 — solo el usuario auditor tiene capacidad de escalar a root.
 
-Conclusión de la sección: el sistema presenta una configuración 
+**Conclusión de la sección:** el sistema presenta una configuración 
 de usuarios saludable. Sin cuentas huérfanas, sin privilegios 
 excesivos, sin señales de compromiso en la gestión de accesos.
 
@@ -58,26 +60,25 @@ excesivos, sin señales de compromiso en la gestión de accesos.
 
 ## 3. Análisis de Archivos Sensibles
 
-Búsqueda de archivos con contraseñas en texto plano:
-Comando: find /home -iname "*password*" 2>/dev/null
-Resultado: sin coincidencias
+**Búsqueda de archivos con contraseñas en texto plano:**
+
+- Comando: `find /home -iname "*password*" 2>/dev/null`
+- Resultado: sin coincidencias
 
 No se encontraron archivos con nombres relacionados a contraseñas 
 en el directorio home.
 
-Verificación de permisos en ~/.ssh:
-Comando: ls -la /home/patgsj/.ssh
-Resultado: permisos correctos (rwx------ en carpeta, rw------- en 
-authorized_keys). Archivo vacío, sin claves configuradas.
+**Verificación de permisos en ~/.ssh:**
 
-Búsqueda de archivos con permisos 777:
-Comando: find /home -perm 777 2>/dev/null
-Resultado: 89 coincidencias, todas dentro de la infraestructura 
-interna de Snap (Firefox, firmware-updater, snapd-desktop-integration). 
-Sin riesgo real — son archivos de caché y configuración gestionados 
-automáticamente por el sistema de paquetes.
+- Comando: `ls -la /home/patgsj/.ssh`
+- Resultado: permisos correctos (rwx------ en carpeta, rw------- en authorized_keys). Archivo vacío, sin claves configuradas.
 
-Conclusión de la sección: no se detectaron archivos sensibles 
+**Búsqueda de archivos con permisos 777:**
+
+- Comando: `find /home -perm 777 2>/dev/null`
+- Resultado: 89 coincidencias, todas dentro de la infraestructura interna de Snap (Firefox, firmware-updater, snapd-desktop-integration). Sin riesgo real — son archivos de caché y configuración gestionados automáticamente por el sistema de paquetes.
+
+**Conclusión de la sección:** no se detectaron archivos sensibles 
 expuestos, credenciales en texto plano, ni configuraciones de 
 permisos peligrosas creadas por el usuario. Los únicos resultados 
 con permisos 777 corresponden a comportamiento esperado del 
@@ -87,7 +88,7 @@ sistema de paquetes Snap.
 
 ## 4. Conclusiones y Recomendaciones
 
-Conclusión general:
+**Conclusión general:**
 
 El sistema se encuentra seguro. No se encontró ningún archivo con 
 contraseñas en texto plano. Los permisos de la carpeta .ssh eran 
@@ -96,7 +97,7 @@ sistema, tiene acceso a ella. Los archivos con permisos 777
 encontrados pertenecían al sistema Snap, no a archivos creados 
 por el usuario, por lo que no representan un riesgo real.
 
-Recomendaciones:
+**Recomendaciones:**
 
 1. Mantener el sistema y el kernel actualizados regularmente.
 2. Revisar periódicamente /etc/passwd y el grupo sudo para 
@@ -112,4 +113,4 @@ Recomendaciones:
 whoami, id, hostname, uname -a, grep, awk, find, ls -la
 
 Referencia completa de comandos disponible en:
-04-linux-fundamentals/11-linux-cheatsheet.md
+`04-linux-fundamentals/11-linux-cheatsheet.md`
